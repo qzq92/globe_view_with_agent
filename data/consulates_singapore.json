@@ -1,0 +1,152 @@
+{
+  "USA": {
+    "mission_name": "Embassy of the United States of America in Singapore",
+    "address": "27 Napier Road, Singapore 258508",
+    "official_link": "https://sg.usembassy.gov/",
+    "note": ""
+  },
+  "GBR": {
+    "mission_name": "British High Commission Singapore",
+    "address": "100 Tanglin Road, Singapore 247919",
+    "official_link": "https://www.gov.uk/world/organisations/british-high-commission-singapore",
+    "note": ""
+  },
+  "CAN": {
+    "mission_name": "High Commission of Canada in Singapore",
+    "address": "One George Street, #11-01, Singapore 049145",
+    "official_link": "https://www.international.gc.ca/country-pays/singapore-singapour/singapore-singapour.aspx?lang=eng",
+    "note": ""
+  },
+  "AUS": {
+    "mission_name": "Australian High Commission Singapore",
+    "address": "25 Napier Road, Singapore 258507",
+    "official_link": "https://singapore.embassy.gov.au/",
+    "note": ""
+  },
+  "NZL": {
+    "mission_name": "New Zealand High Commission Singapore",
+    "address": "1 George Street, #21-04, Singapore 049145",
+    "official_link": "https://www.mfat.govt.nz/en/countries-and-regions/south-east-asia/singapore/new-zealand-high-commission",
+    "note": ""
+  },
+  "CHN": {
+    "mission_name": "Embassy of the People's Republic of China in Singapore",
+    "address": "150 Tanglin Road, Singapore 247969",
+    "official_link": "http://sg.china-embassy.gov.cn/",
+    "note": ""
+  },
+  "JPN": {
+    "mission_name": "Embassy of Japan in Singapore",
+    "address": "16 Nassim Road, Singapore 258390",
+    "official_link": "https://www.sg.emb-japan.go.jp/",
+    "note": ""
+  },
+  "KOR": {
+    "mission_name": "Embassy of the Republic of Korea in Singapore",
+    "address": "47 Scotts Road, #08-00 Goldbell Towers, Singapore 228233",
+    "official_link": "https://overseas.mofa.go.kr/sg-en/index.do",
+    "note": ""
+  },
+  "IND": {
+    "mission_name": "High Commission of India in Singapore",
+    "address": "31 Grange Road, Singapore 239702",
+    "official_link": "https://www.hcisingapore.gov.in/",
+    "note": ""
+  },
+  "IDN": {
+    "mission_name": "Embassy of the Republic of Indonesia in Singapore",
+    "address": "7 Chatsworth Road, Singapore 249761",
+    "official_link": "https://kemlu.go.id/singapore/en",
+    "note": ""
+  },
+  "MYS": {
+    "mission_name": "High Commission of Malaysia in Singapore",
+    "address": "301 Jervois Road, Singapore 249077",
+    "official_link": "https://www.kln.gov.my/web/sgp_singapore",
+    "note": ""
+  },
+  "THA": {
+    "mission_name": "Royal Thai Embassy, Singapore",
+    "address": "370 Orchard Road, Singapore 238870",
+    "official_link": "https://www.thaiembassy.sg/",
+    "note": ""
+  },
+  "VNM": {
+    "mission_name": "Embassy of the Socialist Republic of Viet Nam in Singapore",
+    "address": "10 Leedon Park, Singapore 267887",
+    "official_link": "https://vnembassy-singapore.mofa.gov.vn/",
+    "note": ""
+  },
+  "PHL": {
+    "mission_name": "Embassy of the Republic of the Philippines in Singapore",
+    "address": "20 Nassim Road, Singapore 258395",
+    "official_link": "https://www.philippine-embassy.org.sg/",
+    "note": ""
+  },
+  "DEU": {
+    "mission_name": "Embassy of the Federal Republic of Germany in Singapore",
+    "address": "50 Raffles Place, #12-00 Singapore Land Tower, Singapore 048623",
+    "official_link": "https://singapur.diplo.de/sg-en",
+    "note": ""
+  },
+  "FRA": {
+    "mission_name": "Embassy of France in Singapore",
+    "address": "101-103 Cluny Park Road, Singapore 259595",
+    "official_link": "https://sg.ambafrance.org/",
+    "note": ""
+  },
+  "ITA": {
+    "mission_name": "Embassy of Italy in Singapore",
+    "address": "101 Thomson Road, #27-02 United Square, Singapore 307591",
+    "official_link": "https://ambsingapore.esteri.it/en/",
+    "note": ""
+  },
+  "ESP": {
+    "mission_name": "Embassy of Spain in Singapore",
+    "address": "7 Temasek Boulevard, #39-00 Suntec Tower One, Singapore 038987",
+    "official_link": "https://www.exteriores.gob.es/Embajadas/singapur/en/Paginas/index.aspx",
+    "note": ""
+  },
+  "NLD": {
+    "mission_name": "Embassy of the Kingdom of the Netherlands in Singapore",
+    "address": "541 Orchard Road, #13-01 Liat Towers, Singapore 238881",
+    "official_link": "https://www.netherlandsandyou.nl/web/singapore",
+    "note": ""
+  },
+  "CHE": {
+    "mission_name": "Embassy of Switzerland in Singapore",
+    "address": "1 Swiss Club Link, Singapore 288162",
+    "official_link": "https://www.eda.admin.ch/countries/singapore/en/home/representations/embassy-singapore.html",
+    "note": ""
+  },
+  "BRA": {
+    "mission_name": "Embassy of Brazil in Singapore",
+    "address": "101 Thomson Road, #17-05 United Square, Singapore 307591",
+    "official_link": "https://www.gov.br/mre/pt-br/embaixada-singapura",
+    "note": ""
+  },
+  "MEX": {
+    "mission_name": "Embassy of Mexico in Singapore",
+    "address": "152 Beach Road, #03-01 Gateway East, Singapore 189721",
+    "official_link": "https://embamex.sre.gob.mx/singapur/",
+    "note": ""
+  },
+  "ZAF": {
+    "mission_name": "South African High Commission in Singapore",
+    "address": "Odeon Towers, 15th Floor, 331 North Bridge Road, Singapore 188720",
+    "official_link": "https://dirco1.azurewebsites.net/singapore/",
+    "note": ""
+  },
+  "ARE": {
+    "mission_name": "Embassy of the United Arab Emirates in Singapore",
+    "address": "See official link for current Singapore address",
+    "official_link": "https://www.mofa.gov.ae/en/Missions/Singapore",
+    "note": ""
+  },
+  "SAU": {
+    "mission_name": "Embassy of the Kingdom of Saudi Arabia in Singapore",
+    "address": "See official link for current Singapore address",
+    "official_link": "https://embassies.mofa.gov.sa/sites/Singapore/EN/Pages/default.aspx",
+    "note": ""
+  }
+}
