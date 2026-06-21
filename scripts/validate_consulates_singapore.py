@@ -27,21 +27,22 @@ from urllib.parse import urlparse
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 
-from config.paths import CONSULATES_FILE
-from config.validation import (
+from config.paths import CONSULATES_FILE  # pylint: disable=wrong-import-position
+from config.validation import (  # pylint: disable=wrong-import-position
     BOT_BLOCK_HINTS,
     ISO3_RE,
     REQUIRED_FIELDS,
     SINGAPORE_HINTS,
 )
 
-import helpers.ssl_patch  # noqa: E402 - initialize SSL before requests
+import helpers.ssl_patch  # noqa: E402  # pylint: disable=unused-import,wrong-import-position
 
-import requests  # noqa: E402
-from data_loader import load_country_data  # noqa: E402
+import requests  # noqa: E402  # pylint: disable=wrong-import-position,wrong-import-order
+from data_loader import load_country_data  # noqa: E402  # pylint: disable=wrong-import-position
 
 
 def parse_args() -> argparse.Namespace:
+    """Parse command-line options for the validator."""
     parser = argparse.ArgumentParser(
         description="Validate data/consulates_singapore.json."
     )
@@ -60,6 +61,7 @@ def parse_args() -> argparse.Namespace:
 
 
 def load_data() -> dict[str, Any]:
+    """Load and validate the top-level JSON object shape."""
     try:
         data = json.loads(CONSULATES_FILE.read_text(encoding="utf-8"))
     except FileNotFoundError:
@@ -73,6 +75,7 @@ def load_data() -> dict[str, Any]:
 
 
 def validate_schema(data: dict[str, Any]) -> tuple[list[str], list[str]]:
+    """Validate entry shape, required fields, and link format."""
     errors: list[str] = []
     warnings: list[str] = []
     seen_links: dict[str, str] = {}
@@ -129,6 +132,7 @@ def validate_iso3_codes(data: dict[str, Any]) -> tuple[list[str], list[str]]:
 
 
 def check_link(iso3: str, url: str, timeout: int) -> tuple[list[str], list[str]]:
+    """Check one official link for reachability and Singapore-related content."""
     errors: list[str] = []
     warnings: list[str] = []
     headers = {
@@ -171,7 +175,8 @@ def check_link(iso3: str, url: str, timeout: int) -> tuple[list[str], list[str]]
     content_type = response.headers.get("content-type", "").lower()
     if "text/html" not in content_type and "text/plain" not in content_type:
         warnings.append(
-            f"{iso3}.official_link reachable but content type is {content_type or 'unknown'}."
+            f"{iso3}.official_link reachable but content type is "
+            f"{content_type or 'unknown'}."
         )
         return errors, warnings
 
@@ -185,12 +190,14 @@ def check_link(iso3: str, url: str, timeout: int) -> tuple[list[str], list[str]]
     final_url = response.url.lower()
     if not any(hint in text or hint in final_url for hint in SINGAPORE_HINTS):
         warnings.append(
-            f"{iso3}.official_link reachable but page text/URL did not mention Singapore."
+            f"{iso3}.official_link reachable but page text/URL did not "
+            "mention Singapore."
         )
     return errors, warnings
 
 
 def validate_links(data: dict[str, Any], timeout: int) -> tuple[list[str], list[str]]:
+    """Validate official links for all consulate entries."""
     errors: list[str] = []
     warnings: list[str] = []
 
@@ -206,6 +213,7 @@ def validate_links(data: dict[str, Any], timeout: int) -> tuple[list[str], list[
 
 
 def print_results(errors: list[str], warnings: list[str]) -> None:
+    """Print validation warnings and errors to stdout."""
     if warnings:
         print("Warnings:")
         for warning in warnings:
@@ -222,6 +230,7 @@ def print_results(errors: list[str], warnings: list[str]) -> None:
 
 
 def main() -> int:
+    """Run all validation checks and return a process exit code."""
     args = parse_args()
     data = load_data()
 

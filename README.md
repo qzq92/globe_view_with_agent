@@ -93,3 +93,19 @@ does not appear Singapore-related. To run only local checks without HTTP request
 ```bash
 uv run python scripts/validate_consulates_singapore.py --offline
 ```
+
+## CI
+
+GitHub Actions runs on every push and pull request to `main`/`master`:
+
+- **Dependency vulnerability audit** — `uv run --with pip-audit pip-audit` scans the locked environment for known CVEs
+- **Pylint** — lint checks on `scripts/`
+- **Offline consulate validation** — schema and ISO-3 checks without network calls
+
+Run the audit locally:
+
+```bash
+uv sync --all-groups
+uv run --with pip-audit pip-audit --progress-spinner off --skip-editable
+uv run pylint scripts
+```
