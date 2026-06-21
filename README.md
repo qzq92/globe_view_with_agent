@@ -14,6 +14,30 @@ Hover over any country on the world map to see its key information:
 
 The hovered country also populates a synced side info panel.
 
+## How it's built
+
+The dashboard is a local Python web app. Dependencies are declared in
+[`pyproject.toml`](pyproject.toml) and installed with [uv](https://docs.astral.sh/uv/).
+
+| Library | Role in this project |
+| --- | --- |
+| [Dash](https://dash.plotly.com/) | Web UI framework — layout, tabs (Map/Globe), callbacks, and the side info panel |
+| [Plotly](https://plotly.com/python/) | Interactive choropleth world map, including natural-earth and orthographic (globe) projections |
+| [pandas](https://pandas.pydata.org/) | Loads, merges, and formats country records from APIs and curated JSON |
+| [requests](https://requests.readthedocs.io/) | HTTP client for REST Countries and World Bank Open Data |
+| [python-dotenv](https://github.com/theskumar/python-dotenv) | Reads `REST_COUNTRIES_API_KEY` from `.env` at startup |
+| [truststore](https://github.com/sethmlarson/truststore) | Uses the OS certificate store for HTTPS (helps on Windows and corporate networks) |
+
+Dash runs on **Flask** and **Werkzeug** (installed transitively). Those versions are
+pinned in `pyproject.toml` so known CVEs in older releases are not pulled in.
+
+Development-only tools (installed with `uv sync --all-groups`):
+
+| Library | Role |
+| --- | --- |
+| [pip-audit](https://pypi.org/project/pip-audit/) | Scans locked dependencies for known vulnerabilities in CI |
+| [pylint](https://pylint.readthedocs.io/) | Static analysis for scripts under `scripts/` |
+
 ## Data sources
 
 - **Land area, population, capital, government type, leader, major news outlet,
@@ -30,8 +54,8 @@ The hovered country also populates a synced side info panel.
   [`data/consulates_singapore.json`](data/consulates_singapore.json). Countries
   without a curated entry show `No Singapore mission listed`.
 
-> Note: `truststore` is included so the app uses your operating system's
-> certificate store. This lets the HTTPS API calls succeed on networks with
+> Note: On Windows, `helpers/ssl_patch.py` initializes TLS before any HTTP calls.
+> Together with `truststore`, this helps API requests succeed on networks with
 > corporate TLS inspection, where Python's bundled certificates would be rejected.
 
 ## Setup
