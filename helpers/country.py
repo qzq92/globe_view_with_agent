@@ -22,25 +22,6 @@ def primary_capital(capitals: list[dict[str, Any]] | None) -> str:
     return first or MISSING
 
 
-def leader_from_api(leaders: list[dict[str, Any]] | None) -> str | None:
-    if not leaders:
-        return None
-    first = leaders[0]
-    if isinstance(first, dict) and first.get("message"):
-        return None
-    names: list[str] = []
-    for entry in leaders:
-        if not isinstance(entry, dict):
-            continue
-        name = entry.get("name") or entry.get("full_name")
-        title = entry.get("title") or entry.get("role")
-        if name and title:
-            names.append(f"{title} {name}")
-        elif name:
-            names.append(name)
-    return "; ".join(names) if names else None
-
-
 def organizations_from_api(country: dict[str, Any]) -> str:
     memberships = country.get("memberships") or {}
     classification = country.get("classification") or {}
