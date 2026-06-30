@@ -1,7 +1,7 @@
 """World Map Country Dashboard.
 
 An interactive Plotly Dash app. Hovering a country on the choropleth surfaces
-its land area, population, capital, government type, leader, and major news
+its land area, population, capital, government type, UN officials, and major news
 outlet, both in the map tooltip and a synced side panel.
 
 Run with::
@@ -47,25 +47,36 @@ from config.dashboard import (
 )
 from config.data import MISSING
 from config.server import DEBUG, HOST, PORT
-from data_loader import load_country_data
+from data_loader import load_country_data, CountryDataLoad
 from helpers.banner import build_api_error_banner
 from helpers.formatting import format_number
 
-load_result = load_country_data()
-df = load_result.df
+# Global state for cached data
+_load_result: CountryDataLoad | None = None
+df: pd.DataFrame = pd.DataFrame()
 _iso3_index: dict[str, pd.Series] = {}
 
-if not df.empty:
-    # customdata columns must align with the hovertemplate indices below.
-    df["area_fmt"] = df["area"].map(lambda v: format_number(v, " km2"))
-    df["population_fmt"] = df["population"].map(format_number)
-    df["consulate_status"] = df.apply(
-        lambda row: row["consulate_name"]
-        if row["consulate_name"] != MISSING
-        else row["consulate_note"],
-        axis=1,
-    )
-    _iso3_index = {iso3: row for iso3, row in df.set_index("iso3").iterrows()}
+
+def load_and_process_data() -> CountryDataLoad:
+    """Load country data and prepare formatted columns."""
+    global df, _iso3_index
+
+    result = load_country_data()
+
+    if not result.df.empty:
+        # customdata columns must align with the hovertemplate indices below.
+        result.df["area_fmt"] = result.df["area"].map(lambda v: format_number(v, " km2"))
+        result.df["population_fmt"] = result.df["population"].map(format_number)
+        result.df["consulate_status"] = result.df.apply(
+            lambda row: row["consulate_name"]
+            if row["consulate_name"] != MISSING
+            else row["consulate_note"],
+            axis=1,
+        )
+        _iso3_index = {iso3: row for iso3, row in result.df.set_index("iso3").iterrows()}
+        df = result.df
+
+    return result
 
 
 def build_figure(projection_type: str = MAP_PROJECTION) -> go.Figure:
@@ -214,56 +225,143 @@ def render_panel(iso3: str | None) -> list[Any]:
     ]
 
 
+def build_loading_layout() -> html.Div:
+    """Return the loading screen layout shown while fetching data."""
+    return html.Div(
+        style={
+            **LAYOUT_STYLE,
+            "display": "flex",
+            "flexDirection": "column",
+            "alignItems": "center",
+            "justifyContent": "center",
+            "height": "100vh",
+        },
+        children=[
+            dcc.Interval(
+                id="init-interval",
+                interval=100,
+                n_intervals=0,
+                max_intervals=1,
+            ),
+            html.H1(
+                APP_TITLE,
+                style={"textAlign": "center", "marginBottom": "20px"},
+            ),
+            html.Div(
+                [
+                    # Simple pulsing dots loader
+                    html.Div(
+                        "●  ●  ●",
+                        style={
+                            "color": COLORS["accent"],
+                            "fontSize": "24px",
+                            "marginBottom": "16px",
+                            "letterSpacing": "8px",
+                        },
+                    ),
+                    html.P(
+                        "Loading country data and diplomatic missions...",
+                        style={"color": COLORS["muted"], "fontSize": "14px"},
+                    ),
+                    html.P(
+                        "This may take a moment while we fetch from REST Countries, "
+                        "World Bank, and Singapore MFA.",
+                        style={
+                            "color": COLORS["muted"],
+                            "fontSize": "12px",
+                            "textAlign": "center",
+                            "maxWidth": "400px",
+                        },
+                    ),
+                ],
+                style={
+                    "display": "flex",
+                    "flexDirection": "column",
+                    "alignItems": "center",
+                },
+            ),
+        ],
+    )
+
+
+def build_main_layout(banner_messages: list[str]) -> html.Div:
+    """Return the main app layout after data is loaded."""
+    return html.Div(
+        style=LAYOUT_STYLE,
+        children=[
+            html.H1(
+                APP_TITLE,
+                style={"textAlign": "center", "marginBottom": "4px"},
+            ),
+            html.P(
+                "Hover over any country to explore its key information.",
+                style=SUBTITLE_STYLE,
+            ),
+            build_api_error_banner(banner_messages),
+            html.Div(
+                dcc.Tabs(
+                    id="map-view-tabs",
+                    value=MAP_VIEW_TAB_MAP,
+                    children=[
+                        dcc.Tab(label="Map", value=MAP_VIEW_TAB_MAP),
+                        dcc.Tab(label="Globe", value=MAP_VIEW_TAB_GLOBE),
+                    ],
+                    colors=TAB_COLORS,
+                    style={"width": "fit-content"},
+                ),
+                style=MAP_VIEW_TABS_STYLE,
+                className="map-view-tabs",
+            ),
+            html.Div(
+                style=CONTENT_ROW_STYLE,
+                children=[
+                    html.Div(
+                        dcc.Loading(
+                            id="map-loading",
+                            type="default",
+                            color=COLORS["accent"],
+                            children=dcc.Graph(
+                                id="world-map",
+                                figure=build_figure(MAP_PROJECTION),
+                                style={"height": GRAPH_HEIGHT},
+                                config=GRAPH_CONFIG,
+                            ),
+                        ),
+                        style=MAP_CONTAINER_STYLE,
+                    ),
+                    html.Div(
+                        id="info-panel",
+                        style=PANEL_CONTAINER_STYLE,
+                        children=render_panel(None),
+                    ),
+                ],
+            ),
+        ],
+    )
+
+
 app = Dash(__name__)
 app.title = APP_TITLE
 
-app.layout = html.Div(
-    style=LAYOUT_STYLE,
-    children=[
-        html.H1(
-            APP_TITLE,
-            style={"textAlign": "center", "marginBottom": "4px"},
-        ),
-        html.P(
-            "Hover over any country to explore its key information.",
-            style=SUBTITLE_STYLE,
-        ),
-        build_api_error_banner(load_result.banner_messages),
-        html.Div(
-            dcc.Tabs(
-                id="map-view-tabs",
-                value=MAP_VIEW_TAB_MAP,
-                children=[
-                    dcc.Tab(label="Map", value=MAP_VIEW_TAB_MAP),
-                    dcc.Tab(label="Globe", value=MAP_VIEW_TAB_GLOBE),
-                ],
-                colors=TAB_COLORS,
-                style={"width": "fit-content"},
-            ),
-            style=MAP_VIEW_TABS_STYLE,
-            className="map-view-tabs",
-        ),
-        html.Div(
-            style=CONTENT_ROW_STYLE,
-            children=[
-                html.Div(
-                    dcc.Graph(
-                        id="world-map",
-                        figure=build_figure(MAP_PROJECTION),
-                        style={"height": GRAPH_HEIGHT},
-                        config=GRAPH_CONFIG,
-                    ),
-                    style=MAP_CONTAINER_STYLE,
-                ),
-                html.Div(
-                    id="info-panel",
-                    style=PANEL_CONTAINER_STYLE,
-                    children=render_panel(None),
-                ),
-            ],
-        ),
-    ],
+# Start with loading layout
+app.layout = build_loading_layout()
+
+
+@app.callback(
+    Output("app-container", "children"),
+    Input("init-interval", "n_intervals"),
+    prevent_initial_call=False,
 )
+def init_app(_: int) -> html.Div:
+    """Load data on app start and switch from loading to main layout."""
+    global _load_result
+
+    if _load_result is None:
+        print("Loading country data and diplomatic missions...")
+        _load_result = load_and_process_data()
+        print(f"Loaded {len(df)} countries into dashboard")
+
+    return build_main_layout(_load_result.banner_messages if _load_result else [])
 
 
 @app.callback(Output("world-map", "figure"), Input("map-view-tabs", "value"))
@@ -280,6 +378,10 @@ def update_panel(hover_data: dict[str, Any] | None) -> list[Any]:
         return render_panel(None)
     iso3 = hover_data["points"][0].get("location")
     return render_panel(iso3)
+
+
+# Wrap layout in a container for dynamic updates
+app.layout = html.Div(id="app-container", children=app.layout)
 
 
 if __name__ == "__main__":
