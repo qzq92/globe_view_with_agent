@@ -53,12 +53,6 @@
     "official_link": "https://www.hcisingapore.gov.in/",
     "note": ""
   },
-  "IDN": {
-    "mission_name": "Embassy of the Republic of Indonesia in Singapore",
-    "address": "7 Chatsworth Road, Singapore 249761",
-    "official_link": "https://kemlu.go.id/singapore/en",
-    "note": ""
-  },
   "MYS": {
     "mission_name": "High Commission of Malaysia in Singapore",
     "address": "301 Jervois Road, Singapore 249077",
@@ -140,13 +134,565 @@
   "ARE": {
     "mission_name": "Embassy of the United Arab Emirates in Singapore",
     "address": "See official link for current Singapore address",
-    "official_link": "https://www.mofa.gov.ae/en/Missions/Singapore",
+    "official_link": "https://www.mfa.gov.sg/visiting-singapore/foreign-representatives-to-singapore/united-arab-emirates",
     "note": ""
   },
   "SAU": {
     "mission_name": "Embassy of the Kingdom of Saudi Arabia in Singapore",
     "address": "See official link for current Singapore address",
-    "official_link": "https://embassies.mofa.gov.sa/sites/Singapore/EN/Pages/default.aspx",
+    "official_link": "https://www.mfa.gov.sg/visiting-singapore/foreign-representatives-to-singapore/saudi-arabia",
     "note": ""
+  },
+  "ARG": {
+    "mission_name": "Embassy of the Argentine Republic",
+    "address": "7 Temasek Boulevard, Suntec Tower One #15-03, Singapore 038987",
+    "official_link": "https://esing.cancilleria.gob.ar/en",
+    "note": "Diplomatic relations established 30 Sep 1974"
+  },
+  "MNG": {
+    "mission_name": "Embassy of Mongolia",
+    "address": "600 North Bridge Road, #24-08 Parkview Square, Singapore 188778",
+    "official_link": "https://singapore.embassy.mn",
+    "note": "Diplomatic relations established 11 Jun 1970"
+  },
+  "GRC": {
+    "mission_name": "Embassy of the Hellenic Republic (Greece)",
+    "address": "See official link for current Singapore address",
+    "official_link": "https://www.mfa.gov.sg/visiting-singapore/foreign-representatives-to-singapore/greece",
+    "note": ""
+  },
+  "BEL": {
+    "mission_name": "Embassy of the Kingdom of Belgium",
+    "address": "See official link for current Singapore address",
+    "official_link": "https://www.mfa.gov.sg/visiting-singapore/foreign-representatives-to-singapore/belgium",
+    "note": ""
+  },
+  "POL": {
+    "mission_name": "Embassy of the Republic of Poland",
+    "address": "See official link for current Singapore address",
+    "official_link": "https://www.mfa.gov.sg/visiting-singapore/foreign-representatives-to-singapore/poland",
+    "note": ""
+  },
+  "TUR": {
+    "mission_name": "Embassy of the Republic of TÃ¼rkiye",
+    "address": "See official link for current Singapore address",
+    "official_link": "https://www.mfa.gov.sg/visiting-singapore/foreign-representatives-to-singapore/embassy-of-the-republic-of-turkey",
+    "note": ""
+  },
+  "EGY": {
+    "mission_name": "Embassy of the Arab Republic of Egypt",
+    "address": "See official link for current Singapore address",
+    "official_link": "https://www.mfa.gov.sg/visiting-singapore/foreign-representatives-to-singapore/egypt",
+    "note": ""
+  },
+  "KEN": {
+    "mission_name": "High Commission of the Republic of Kenya",
+    "address": "See official link for current Singapore address",
+    "official_link": "https://www.mfa.gov.sg/visiting-singapore/foreign-representatives-to-singapore/kenya",
+    "note": ""
+  },
+  "PAK": {
+    "mission_name": "High Commission of Pakistan",
+    "address": "See official link for current Singapore address",
+    "official_link": "https://www.mfa.gov.sg/visiting-singapore/foreign-representatives-to-singapore/pakistan",
+    "note": ""
+  },
+  "DZA": {
+    "mission_name": "Mission of AlgeriaContact details of Algeria's foreign representativeA",
+    "address": "See official link for address",
+    "official_link": "https://www.mfa.gov.sg/visiting-singapore/foreign-representatives-to-singapore/algeria/",
+    "note": "Parsed from MFA directory for AlgeriaContact details of Algeria's foreign representativeA"
+  },
+  "ARM": {
+    "mission_name": "Mission of ArmeniaContact details of Armenia's foreign representativeA",
+    "address": "See official link for address",
+    "official_link": "https://www.mfa.gov.sg/visiting-singapore/foreign-representatives-to-singapore/armenia/",
+    "note": "Parsed from MFA directory for ArmeniaContact details of Armenia's foreign representativeA"
+  },
+  "AUT": {
+    "mission_name": "Mission of AustriaContact details of Austria's foreign representativeA",
+    "address": "See official link for address",
+    "official_link": "https://www.mfa.gov.sg/visiting-singapore/foreign-representatives-to-singapore/austria/",
+    "note": "Parsed from MFA directory for AustriaContact details of Austria's foreign representativeA"
+  },
+  "BHS": {
+    "mission_name": "Mission of Bahamas",
+    "address": "See MFA directory for address",
+    "official_link": "https://www.mfa.gov.sg/visiting-singapore/foreign-representatives-to-singapore/bahamas",
+    "note": "Parsed from MFA PDF for Bahamas"
+  },
+  "BGD": {
+    "mission_name": "Mission of Bangladesh",
+    "address": "See MFA directory for address",
+    "official_link": "https://www.mfa.gov.sg/visiting-singapore/foreign-representatives-to-singapore/bangladesh",
+    "note": "Parsed from MFA PDF for Bangladesh"
+  },
+  "BLR": {
+    "mission_name": "Mission of Belarus",
+    "address": "See MFA directory for address",
+    "official_link": "https://www.mfa.gov.sg/visiting-singapore/foreign-representatives-to-singapore/belarus",
+    "note": "Parsed from MFA PDF for Belarus"
+  },
+  "BEN": {
+    "mission_name": "Mission of Benin",
+    "address": "See MFA directory for address",
+    "official_link": "https://www.mfa.gov.sg/visiting-singapore/foreign-representatives-to-singapore/benin",
+    "note": "Parsed from MFA PDF for Benin"
+  },
+  "BTN": {
+    "mission_name": "Mission of Bhutan",
+    "address": "See MFA directory for address",
+    "official_link": "https://www.mfa.gov.sg/visiting-singapore/foreign-representatives-to-singapore/bhutan",
+    "note": "Parsed from MFA PDF for Bhutan"
+  },
+  "BIH": {
+    "mission_name": "Mission of Bosnia And Herzegovina",
+    "address": "See MFA directory for address",
+    "official_link": "https://www.mfa.gov.sg/visiting-singapore/foreign-representatives-to-singapore/bosnia-and-herzegovina",
+    "note": "Parsed from MFA PDF for Bosnia And Herzegovina"
+  },
+  "BWA": {
+    "mission_name": "Mission of Botswana",
+    "address": "See MFA directory for address",
+    "official_link": "https://www.mfa.gov.sg/visiting-singapore/foreign-representatives-to-singapore/botswana",
+    "note": "Parsed from MFA PDF for Botswana"
+  },
+  "BRN": {
+    "mission_name": "Mission of Brunei Darussalam",
+    "address": "See MFA directory for address",
+    "official_link": "https://www.mfa.gov.sg/visiting-singapore/foreign-representatives-to-singapore/brunei-darussalam",
+    "note": "Parsed from MFA PDF for Brunei Darussalam"
+  },
+  "BGR": {
+    "mission_name": "Mission of Bulgaria",
+    "address": "See MFA directory for address",
+    "official_link": "https://www.mfa.gov.sg/visiting-singapore/foreign-representatives-to-singapore/bulgaria",
+    "note": "Parsed from MFA PDF for Bulgaria"
+  },
+  "BDI": {
+    "mission_name": "Mission of Burundi",
+    "address": "See MFA directory for address",
+    "official_link": "https://www.mfa.gov.sg/visiting-singapore/foreign-representatives-to-singapore/burundi",
+    "note": "Parsed from MFA PDF for Burundi"
+  },
+  "KHM": {
+    "mission_name": "Mission of Cambodia",
+    "address": "See MFA directory for address",
+    "official_link": "https://www.mfa.gov.sg/visiting-singapore/foreign-representatives-to-singapore/cambodia",
+    "note": "Parsed from MFA PDF for Cambodia"
+  },
+  "CHL": {
+    "mission_name": "Mission of Chile",
+    "address": "See MFA directory for address",
+    "official_link": "https://www.mfa.gov.sg/visiting-singapore/foreign-representatives-to-singapore/chile",
+    "note": "Parsed from MFA PDF for Chile"
+  },
+  "COL": {
+    "mission_name": "Mission of Colombia",
+    "address": "See MFA directory for address",
+    "official_link": "https://www.mfa.gov.sg/visiting-singapore/foreign-representatives-to-singapore/colombia",
+    "note": "Parsed from MFA PDF for Colombia"
+  },
+  "COG": {
+    "mission_name": "Mission of Congo",
+    "address": "See MFA directory for address",
+    "official_link": "https://www.mfa.gov.sg/visiting-singapore/foreign-representatives-to-singapore/congo",
+    "note": "Parsed from MFA PDF for Congo"
+  },
+  "CRI": {
+    "mission_name": "Mission of Costa Rica",
+    "address": "See MFA directory for address",
+    "official_link": "https://www.mfa.gov.sg/visiting-singapore/foreign-representatives-to-singapore/costa-rica",
+    "note": "Parsed from MFA PDF for Costa Rica"
+  },
+  "HRV": {
+    "mission_name": "Mission of Croatia",
+    "address": "See MFA directory for address",
+    "official_link": "https://www.mfa.gov.sg/visiting-singapore/foreign-representatives-to-singapore/croatia",
+    "note": "Parsed from MFA PDF for Croatia"
+  },
+  "CUB": {
+    "mission_name": "Mission of Cuba",
+    "address": "See MFA directory for address",
+    "official_link": "https://www.mfa.gov.sg/visiting-singapore/foreign-representatives-to-singapore/cuba",
+    "note": "Parsed from MFA PDF for Cuba"
+  },
+  "CYP": {
+    "mission_name": "Mission of Cyprus",
+    "address": "See MFA directory for address",
+    "official_link": "https://www.mfa.gov.sg/visiting-singapore/foreign-representatives-to-singapore/cyprus",
+    "note": "Parsed from MFA PDF for Cyprus"
+  },
+  "CZE": {
+    "mission_name": "Mission of Czech Republic",
+    "address": "See MFA directory for address",
+    "official_link": "https://www.mfa.gov.sg/visiting-singapore/foreign-representatives-to-singapore/czech-republic",
+    "note": "Parsed from MFA PDF for Czech Republic"
+  },
+  "DNK": {
+    "mission_name": "Mission of Denmark",
+    "address": "See MFA directory for address",
+    "official_link": "https://www.mfa.gov.sg/visiting-singapore/foreign-representatives-to-singapore/denmark",
+    "note": "Parsed from MFA PDF for Denmark"
+  },
+  "DJI": {
+    "mission_name": "Mission of Djibouti",
+    "address": "See MFA directory for address",
+    "official_link": "https://www.mfa.gov.sg/visiting-singapore/foreign-representatives-to-singapore/djibouti",
+    "note": "Parsed from MFA PDF for Djibouti"
+  },
+  "ECU": {
+    "mission_name": "Mission of Ecuador",
+    "address": "See MFA directory for address",
+    "official_link": "https://www.mfa.gov.sg/visiting-singapore/foreign-representatives-to-singapore/ecuador",
+    "note": "Parsed from MFA PDF for Ecuador"
+  },
+  "SLV": {
+    "mission_name": "Mission of El Salvador",
+    "address": "See MFA directory for address",
+    "official_link": "https://www.mfa.gov.sg/visiting-singapore/foreign-representatives-to-singapore/el-salvador",
+    "note": "Parsed from MFA PDF for El Salvador"
+  },
+  "GNQ": {
+    "mission_name": "Mission of Equatorial Guinea",
+    "address": "See MFA directory for address",
+    "official_link": "https://www.mfa.gov.sg/visiting-singapore/foreign-representatives-to-singapore/equatorial-guinea",
+    "note": "Parsed from MFA PDF for Equatorial Guinea"
+  },
+  "ERI": {
+    "mission_name": "Mission of Eritrea",
+    "address": "See MFA directory for address",
+    "official_link": "https://www.mfa.gov.sg/visiting-singapore/foreign-representatives-to-singapore/eritrea",
+    "note": "Parsed from MFA PDF for Eritrea"
+  },
+  "EST": {
+    "mission_name": "Mission of Estonia",
+    "address": "See MFA directory for address",
+    "official_link": "https://www.mfa.gov.sg/visiting-singapore/foreign-representatives-to-singapore/estonia",
+    "note": "Parsed from MFA PDF for Estonia"
+  },
+  "ETH": {
+    "mission_name": "Mission of Ethiopia",
+    "address": "See MFA directory for address",
+    "official_link": "https://www.mfa.gov.sg/visiting-singapore/foreign-representatives-to-singapore/ethiopia",
+    "note": "Parsed from MFA PDF for Ethiopia"
+  },
+  "FIN": {
+    "mission_name": "Mission of Finland",
+    "address": "See MFA directory for address",
+    "official_link": "https://www.mfa.gov.sg/visiting-singapore/foreign-representatives-to-singapore/finland",
+    "note": "Parsed from MFA PDF for Finland"
+  },
+  "GAB": {
+    "mission_name": "Mission of Gabon",
+    "address": "See MFA directory for address",
+    "official_link": "https://www.mfa.gov.sg/visiting-singapore/foreign-representatives-to-singapore/gabon",
+    "note": "Parsed from MFA PDF for Gabon"
+  },
+  "GEO": {
+    "mission_name": "Mission of Georgia",
+    "address": "See MFA directory for address",
+    "official_link": "https://www.mfa.gov.sg/visiting-singapore/foreign-representatives-to-singapore/georgia",
+    "note": "Parsed from MFA PDF for Georgia"
+  },
+  "HUN": {
+    "mission_name": "Mission of Hungary",
+    "address": "See MFA directory for address",
+    "official_link": "https://www.mfa.gov.sg/visiting-singapore/foreign-representatives-to-singapore/hungary",
+    "note": "Parsed from MFA PDF for Hungary"
+  },
+  "ISL": {
+    "mission_name": "Mission of Iceland",
+    "address": "See MFA directory for address",
+    "official_link": "https://www.mfa.gov.sg/visiting-singapore/foreign-representatives-to-singapore/iceland",
+    "note": "Parsed from MFA PDF for Iceland"
+  },
+  "IRN": {
+    "mission_name": "Mission of Iran",
+    "address": "See MFA directory for address",
+    "official_link": "https://www.mfa.gov.sg/visiting-singapore/foreign-representatives-to-singapore/iran",
+    "note": "Parsed from MFA PDF for Iran"
+  },
+  "IRL": {
+    "mission_name": "Mission of Ireland",
+    "address": "See MFA directory for address",
+    "official_link": "https://www.mfa.gov.sg/visiting-singapore/foreign-representatives-to-singapore/ireland",
+    "note": "Parsed from MFA PDF for Ireland"
+  },
+  "ISR": {
+    "mission_name": "Mission of Israel",
+    "address": "See MFA directory for address",
+    "official_link": "https://www.mfa.gov.sg/visiting-singapore/foreign-representatives-to-singapore/israel",
+    "note": "Parsed from MFA PDF for Israel"
+  },
+  "JOR": {
+    "mission_name": "Mission of Jordan",
+    "address": "See MFA directory for address",
+    "official_link": "https://www.mfa.gov.sg/visiting-singapore/foreign-representatives-to-singapore/jordan",
+    "note": "Parsed from MFA PDF for Jordan"
+  },
+  "KAZ": {
+    "mission_name": "Mission of Kazakhstan",
+    "address": "See MFA directory for address",
+    "official_link": "https://www.mfa.gov.sg/visiting-singapore/foreign-representatives-to-singapore/kazakhstan",
+    "note": "Parsed from MFA PDF for Kazakhstan"
+  },
+  "KWT": {
+    "mission_name": "Mission of Kuwait",
+    "address": "See MFA directory for address",
+    "official_link": "https://www.mfa.gov.sg/visiting-singapore/foreign-representatives-to-singapore/kuwait",
+    "note": "Parsed from MFA PDF for Kuwait"
+  },
+  "KGZ": {
+    "mission_name": "Mission of Kyrgyzstan",
+    "address": "See MFA directory for address",
+    "official_link": "https://www.mfa.gov.sg/visiting-singapore/foreign-representatives-to-singapore/kyrgyzstan",
+    "note": "Parsed from MFA PDF for Kyrgyzstan"
+  },
+  "COD": {
+    "mission_name": "Mission of Republic",
+    "address": "See MFA directory for address",
+    "official_link": "https://www.mfa.gov.sg/visiting-singapore/foreign-representatives-to-singapore/republic",
+    "note": "Parsed from MFA PDF for Republic"
+  },
+  "LVA": {
+    "mission_name": "Mission of Latvia",
+    "address": "See MFA directory for address",
+    "official_link": "https://www.mfa.gov.sg/visiting-singapore/foreign-representatives-to-singapore/latvia",
+    "note": "Parsed from MFA PDF for Latvia"
+  },
+  "LTU": {
+    "mission_name": "Mission of Lithuania",
+    "address": "See MFA directory for address",
+    "official_link": "https://www.mfa.gov.sg/visiting-singapore/foreign-representatives-to-singapore/lithuania",
+    "note": "Parsed from MFA PDF for Lithuania"
+  },
+  "LUX": {
+    "mission_name": "Mission of Luxembourg",
+    "address": "See MFA directory for address",
+    "official_link": "https://www.mfa.gov.sg/visiting-singapore/foreign-representatives-to-singapore/luxembourg",
+    "note": "Parsed from MFA PDF for Luxembourg"
+  },
+  "MWI": {
+    "mission_name": "Mission of Malawi",
+    "address": "See MFA directory for address",
+    "official_link": "https://www.mfa.gov.sg/visiting-singapore/foreign-representatives-to-singapore/malawi",
+    "note": "Parsed from MFA PDF for Malawi"
+  },
+  "MDV": {
+    "mission_name": "Mission of Maldives",
+    "address": "See MFA directory for address",
+    "official_link": "https://www.mfa.gov.sg/visiting-singapore/foreign-representatives-to-singapore/maldives",
+    "note": "Parsed from MFA PDF for Maldives"
+  },
+  "MOZ": {
+    "mission_name": "Mission of Mozambique",
+    "address": "See MFA directory for address",
+    "official_link": "https://www.mfa.gov.sg/visiting-singapore/foreign-representatives-to-singapore/mozambique",
+    "note": "Parsed from MFA PDF for Mozambique"
+  },
+  "MMR": {
+    "mission_name": "Mission of Myanmar",
+    "address": "See MFA directory for address",
+    "official_link": "https://www.mfa.gov.sg/visiting-singapore/foreign-representatives-to-singapore/myanmar",
+    "note": "Parsed from MFA PDF for Myanmar"
+  },
+  "NPL": {
+    "mission_name": "Mission of Nepal",
+    "address": "See MFA directory for address",
+    "official_link": "https://www.mfa.gov.sg/visiting-singapore/foreign-representatives-to-singapore/nepal",
+    "note": "Parsed from MFA PDF for Nepal"
+  },
+  "NGA": {
+    "mission_name": "Mission of Nigeria",
+    "address": "See MFA directory for address",
+    "official_link": "https://www.mfa.gov.sg/visiting-singapore/foreign-representatives-to-singapore/nigeria",
+    "note": "Parsed from MFA PDF for Nigeria"
+  },
+  "MKD": {
+    "mission_name": "Mission of North Macedonia,Republic Of",
+    "address": "See MFA directory for address",
+    "official_link": "https://www.mfa.gov.sg/visiting-singapore/foreign-representatives-to-singapore/north-macedonia,republic-of",
+    "note": "Parsed from MFA PDF for North Macedonia,Republic Of"
+  },
+  "NOR": {
+    "mission_name": "Mission of Norway",
+    "address": "See MFA directory for address",
+    "official_link": "https://www.mfa.gov.sg/visiting-singapore/foreign-representatives-to-singapore/norway",
+    "note": "Parsed from MFA PDF for Norway"
+  },
+  "OMN": {
+    "mission_name": "Mission of Oman",
+    "address": "See MFA directory for address",
+    "official_link": "https://www.mfa.gov.sg/visiting-singapore/foreign-representatives-to-singapore/oman",
+    "note": "Parsed from MFA PDF for Oman"
+  },
+  "PAN": {
+    "mission_name": "Mission of Panama",
+    "address": "See MFA directory for address",
+    "official_link": "https://www.mfa.gov.sg/visiting-singapore/foreign-representatives-to-singapore/panama",
+    "note": "Parsed from MFA PDF for Panama"
+  },
+  "PNG": {
+    "mission_name": "Mission of Papua New Guinea",
+    "address": "See MFA directory for address",
+    "official_link": "https://www.mfa.gov.sg/visiting-singapore/foreign-representatives-to-singapore/papua-new-guinea",
+    "note": "Parsed from MFA PDF for Papua New Guinea"
+  },
+  "PER": {
+    "mission_name": "Mission of Peru",
+    "address": "See MFA directory for address",
+    "official_link": "https://www.mfa.gov.sg/visiting-singapore/foreign-representatives-to-singapore/peru",
+    "note": "Parsed from MFA PDF for Peru"
+  },
+  "PRT": {
+    "mission_name": "Mission of Portugal",
+    "address": "See MFA directory for address",
+    "official_link": "https://www.mfa.gov.sg/visiting-singapore/foreign-representatives-to-singapore/portugal",
+    "note": "Parsed from MFA PDF for Portugal"
+  },
+  "QAT": {
+    "mission_name": "Mission of Qatar",
+    "address": "See MFA directory for address",
+    "official_link": "https://www.mfa.gov.sg/visiting-singapore/foreign-representatives-to-singapore/qatar",
+    "note": "Parsed from MFA PDF for Qatar"
+  },
+  "ROU": {
+    "mission_name": "Mission of Romania",
+    "address": "See MFA directory for address",
+    "official_link": "https://www.mfa.gov.sg/visiting-singapore/foreign-representatives-to-singapore/romania",
+    "note": "Parsed from MFA PDF for Romania"
+  },
+  "RUS": {
+    "mission_name": "Mission of Russian Federation",
+    "address": "See MFA directory for address",
+    "official_link": "https://www.mfa.gov.sg/visiting-singapore/foreign-representatives-to-singapore/russian-federation",
+    "note": "Parsed from MFA PDF for Russian Federation"
+  },
+  "RWA": {
+    "mission_name": "Mission of Rwanda",
+    "address": "See MFA directory for address",
+    "official_link": "https://www.mfa.gov.sg/visiting-singapore/foreign-representatives-to-singapore/rwanda",
+    "note": "Parsed from MFA PDF for Rwanda"
+  },
+  "SEN": {
+    "mission_name": "Mission of Senegal",
+    "address": "See MFA directory for address",
+    "official_link": "https://www.mfa.gov.sg/visiting-singapore/foreign-representatives-to-singapore/senegal",
+    "note": "Parsed from MFA PDF for Senegal"
+  },
+  "SLE": {
+    "mission_name": "Mission of Sierra Leone",
+    "address": "See MFA directory for address",
+    "official_link": "https://www.mfa.gov.sg/visiting-singapore/foreign-representatives-to-singapore/sierra-leone",
+    "note": "Parsed from MFA PDF for Sierra Leone"
+  },
+  "SVK": {
+    "mission_name": "Mission of Slovakia",
+    "address": "See MFA directory for address",
+    "official_link": "https://www.mfa.gov.sg/visiting-singapore/foreign-representatives-to-singapore/slovakia",
+    "note": "Parsed from MFA PDF for Slovakia"
+  },
+  "SVN": {
+    "mission_name": "Mission of Slovenia",
+    "address": "See MFA directory for address",
+    "official_link": "https://www.mfa.gov.sg/visiting-singapore/foreign-representatives-to-singapore/slovenia",
+    "note": "Parsed from MFA PDF for Slovenia"
+  },
+  "LKA": {
+    "mission_name": "Mission of Sri Lanka",
+    "address": "See MFA directory for address",
+    "official_link": "https://www.mfa.gov.sg/visiting-singapore/foreign-representatives-to-singapore/sri-lanka",
+    "note": "Parsed from MFA PDF for Sri Lanka"
+  },
+  "SWE": {
+    "mission_name": "Mission of Sweden",
+    "address": "See MFA directory for address",
+    "official_link": "https://www.mfa.gov.sg/visiting-singapore/foreign-representatives-to-singapore/sweden",
+    "note": "Parsed from MFA PDF for Sweden"
+  },
+  "TZA": {
+    "mission_name": "Mission of Tanzania, United Republic Of",
+    "address": "See MFA directory for address",
+    "official_link": "https://www.mfa.gov.sg/visiting-singapore/foreign-representatives-to-singapore/tanzania,-united-republic-of",
+    "note": "Parsed from MFA PDF for Tanzania, United Republic Of"
+  },
+  "TLS": {
+    "mission_name": "Mission of Timor-Leste",
+    "address": "See MFA directory for address",
+    "official_link": "https://www.mfa.gov.sg/visiting-singapore/foreign-representatives-to-singapore/timor-leste",
+    "note": "Parsed from MFA PDF for Timor-Leste"
+  },
+  "UGA": {
+    "mission_name": "Mission of Uganda",
+    "address": "See MFA directory for address",
+    "official_link": "https://www.mfa.gov.sg/visiting-singapore/foreign-representatives-to-singapore/uganda",
+    "note": "Parsed from MFA PDF for Uganda"
+  },
+  "UKR": {
+    "mission_name": "Mission of Ukraine",
+    "address": "See MFA directory for address",
+    "official_link": "https://www.mfa.gov.sg/visiting-singapore/foreign-representatives-to-singapore/ukraine",
+    "note": "Parsed from MFA PDF for Ukraine"
+  },
+  "UZB": {
+    "mission_name": "Mission of Uzbekistan",
+    "address": "See MFA directory for address",
+    "official_link": "https://www.mfa.gov.sg/visiting-singapore/foreign-representatives-to-singapore/uzbekistan",
+    "note": "Parsed from MFA PDF for Uzbekistan"
+  },
+  "ZMB": {
+    "mission_name": "Mission of Zambia",
+    "address": "See MFA directory for address",
+    "official_link": "https://www.mfa.gov.sg/visiting-singapore/foreign-representatives-to-singapore/zambia",
+    "note": "Parsed from MFA PDF for Zambia"
+  },
+  "ZWE": {
+    "mission_name": "Mission of Zimbabwe",
+    "address": "See MFA directory for address",
+    "official_link": "https://www.mfa.gov.sg/visiting-singapore/foreign-representatives-to-singapore/zimbabwe",
+    "note": "Parsed from MFA PDF for Zimbabwe"
+  },
+  "MDG": {
+    "mission_name": "Mission of Madagascar",
+    "address": "See MFA directory for address",
+    "official_link": "https://www.mfa.gov.sg/visiting-singapore/foreign-representatives-to-singapore/madagascar",
+    "note": "Parsed from MFA PDF for Madagascar"
+  },
+  "MAR": {
+    "mission_name": "Mission of Morocco",
+    "address": "See MFA directory for address",
+    "official_link": "https://www.mfa.gov.sg/visiting-singapore/foreign-representatives-to-singapore/morocco",
+    "note": "Parsed from MFA PDF for Morocco"
+  },
+  "SRB": {
+    "mission_name": "Mission of Serbia",
+    "address": "See MFA directory for address",
+    "official_link": "https://www.mfa.gov.sg/visiting-singapore/foreign-representatives-to-singapore/serbia",
+    "note": "Parsed from MFA PDF for Serbia"
+  },
+  "SYC": {
+    "mission_name": "Mission of Seychelles",
+    "address": "See MFA directory for address",
+    "official_link": "https://www.mfa.gov.sg/visiting-singapore/foreign-representatives-to-singapore/seychelles",
+    "note": "Parsed from MFA PDF for Seychelles"
+  },
+  "SDN": {
+    "mission_name": "Mission of Sudan",
+    "address": "See MFA directory for address",
+    "official_link": "https://www.mfa.gov.sg/visiting-singapore/foreign-representatives-to-singapore/sudan",
+    "note": "Parsed from MFA PDF for Sudan"
+  },
+  "IDN": {
+    "mission_name": "Mission of Email: Armindonesiaembassy@Mfa.Am",
+    "address": "See MFA directory for address",
+    "official_link": "https://www.mfa.gov.sg/visiting-singapore/foreign-representatives-to-singapore/email:-armindonesiaembassy@mfa.am",
+    "note": "Parsed from MFA PDF for Email: Armindonesiaembassy@Mfa.Am"
+  },
+  "SGP": {
+    "mission_name": "Mission of Email: Enquiries.Singapore@Dfat.Gov.Au",
+    "address": "See MFA directory for address",
+    "official_link": "https://www.mfa.gov.sg/visiting-singapore/foreign-representatives-to-singapore/email:-enquiries.singapore@dfat.gov.au",
+    "note": "Parsed from MFA PDF for Email: Enquiries.Singapore@Dfat.Gov.Au"
   }
 }
