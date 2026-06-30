@@ -3,14 +3,16 @@ name = "globe-view-with-agent"
 version = "0.1.0"
 description = "Interactive world-map dashboard showing key country information on hover."
 readme = "README.md"
-requires-python = ">=3.10"
+requires-python = ">=3.12,<3.13"
 dependencies = [
-    "dash>=2.16,<3",
+    "dash>=3.3,<4",
     "plotly>=5.20",
     "pandas>=2.0",
     "requests>=2.31",
     "truststore>=0.9",
     "python-dotenv>=1.0",
+    "beautifulsoup4>=4.12",
+    "pypdf>=4.0",
 ]
 
 [dependency-groups]
@@ -27,7 +29,7 @@ override-dependencies = [
 ]
 
 [tool.pylint.main]
-py-version = "3.10"
+py-version = "3.12"
 jobs = 0
 init-hook = 'import sys; from pathlib import Path; sys.path.insert(0, str(Path(".").resolve()))'
 ignore-paths = ["^helpers/ssl_patch\\.py$"]
