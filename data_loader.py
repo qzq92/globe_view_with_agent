@@ -15,6 +15,7 @@ import helpers.ssl_patch  # noqa: F401 - must run before requests (Windows OpenS
 
 import json
 import os
+import time
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from dataclasses import dataclass
 from typing import Any
@@ -25,7 +26,9 @@ from dotenv import load_dotenv
 
 from config.api import (
     AREA_INDICATOR,
+    AUTO_REFRESH_CONSULATES,
     CACHE_TTL_SECONDS,
+    MAX_CITIES_DISPLAY,
     PAGE_LIMIT,
     POPULATION_INDICATOR,
     REQUEST_TIMEOUT,
@@ -42,11 +45,16 @@ from config.paths import (
     WORLDBANK_CACHE_FILE,
 )
 from helpers.cache import cache_is_fresh, read_cache, write_cache
-from helpers.country import leader_from_api, organizations_from_api, primary_capital
+from helpers.countriesnow import (
+    build_normalized_city_lookup,
+    fetch_all_cities,
+    get_cities_for_country,
+)
+from helpers.country import organizations_from_api, primary_capital
+from helpers.un_protocol import fetch_un_protocol_officials
 from helpers.values import is_missing
 from helpers.worldbank import indicator_map
 
-_session: requests.Session | None = None
 _api_key_cache: str | None = None
 
 
@@ -75,13 +83,6 @@ class CountryDataLoad:
                 "Check your API key and network connection."
             )
         return messages
-
-
-def _get_session() -> requests.Session:
-    global _session
-    if _session is None:
-        _session = requests.Session()
-    return _session
 
 
 def _get_api_key() -> str:
@@ -135,20 +136,17 @@ def _fetch_rest_countries_from_api(session: requests.Session) -> list[dict[str, 
     return countries
 
 
-def _worldbank_get_json(
-    session: requests.Session,
-    url: str,
-    params: dict[str, Any],
-) -> list[dict[str, Any]]:
-    response = session.get(url, params=params, timeout=REQUEST_TIMEOUT)
-    response.raise_for_status()
-    payload = response.json()
-    if not isinstance(payload, list) or len(payload) < 2:
-        raise ValueError(f"Unexpected World Bank response shape from {url}.")
-    return payload[1] or []  # type: ignore[return-value]
+def _worldbank_get_json(url: str, params: dict[str, Any]) -> list[dict[str, Any]]:
+    with requests.Session() as session:
+        response = session.get(url, params=params, timeout=REQUEST_TIMEOUT)
+        response.raise_for_status()
+        payload = response.json()
+        if not isinstance(payload, list) or len(payload) < 2:
+            raise ValueError(f"Unexpected World Bank response shape from {url}.")
+        return payload[1] or []  # type: ignore[return-value]
 
 
-def _fetch_worldbank_from_api(session: requests.Session) -> dict[str, Any]:
+def _fetch_worldbank_from_api() -> dict[str, Any]:
     """Fetch World Bank country metadata and indicators in parallel."""
     requests_spec = [
         ("countries", f"{WORLD_BANK_BASE}/country", {"format": "json", "per_page": 400}),
@@ -167,7 +165,7 @@ def _fetch_worldbank_from_api(session: requests.Session) -> dict[str, Any]:
 
     with ThreadPoolExecutor(max_workers=3) as pool:
         futures = {
-            pool.submit(_worldbank_get_json, session, url, params): key
+            pool.submit(_worldbank_get_json, url, params): key
             for key, url, params in requests_spec
         }
         for future in as_completed(futures):
@@ -177,18 +175,17 @@ def _fetch_worldbank_from_api(session: requests.Session) -> dict[str, Any]:
     return result
 
 
-def _resolve_rest_countries(
-    session: requests.Session,
-) -> tuple[list[dict[str, Any]] | None, str | None]:
+def _resolve_rest_countries() -> tuple[list[dict[str, Any]] | None, str | None]:
     """Load REST Countries data from cache or the live API."""
     if cache_is_fresh(RESTCOUNTRIES_CACHE_FILE, CACHE_TTL_SECONDS):
         print("Using cached REST Countries data.")
         return read_cache(RESTCOUNTRIES_CACHE_FILE), None
 
     try:
-        data = _fetch_rest_countries_from_api(session)
-        write_cache(RESTCOUNTRIES_CACHE_FILE, data)
-        return data, None
+        with requests.Session() as session:
+            data = _fetch_rest_countries_from_api(session)
+            write_cache(RESTCOUNTRIES_CACHE_FILE, data)
+            return data, None
     except (requests.RequestException, ValueError, RuntimeError) as exc:
         error = str(exc)
         if RESTCOUNTRIES_CACHE_FILE.exists():
@@ -198,16 +195,14 @@ def _resolve_rest_countries(
         return None, error
 
 
-def _resolve_worldbank_raw(
-    session: requests.Session,
-) -> tuple[dict[str, Any] | None, str | None]:
+def _resolve_worldbank_raw() -> tuple[dict[str, Any] | None, str | None]:
     """Load World Bank data from cache or the live API."""
     if cache_is_fresh(WORLDBANK_CACHE_FILE, CACHE_TTL_SECONDS):
         print("Using cached World Bank data.")
         return read_cache(WORLDBANK_CACHE_FILE), None
 
     try:
-        data = _fetch_worldbank_from_api(session)
+        data = _fetch_worldbank_from_api()
         write_cache(WORLDBANK_CACHE_FILE, data)
         return data, None
     except (requests.RequestException, ValueError) as exc:
@@ -226,17 +221,39 @@ def _fetch_sources_parallel() -> tuple[
     str | None,
 ]:
     """Fetch REST Countries and World Bank data concurrently."""
-    session = _get_session()
     with ThreadPoolExecutor(max_workers=2) as pool:
-        rest_future = pool.submit(_resolve_rest_countries, session)
-        wb_future = pool.submit(_resolve_worldbank_raw, session)
+        rest_future = pool.submit(_resolve_rest_countries)
+        wb_future = pool.submit(_resolve_worldbank_raw)
         raw, rest_error = rest_future.result()
         wb_raw, wb_error = wb_future.result()
     return raw, rest_error, wb_raw, wb_error
 
 
-def _load_consulates() -> dict[str, dict[str, Any]]:
-    """Return consulate entries keyed by ISO-3 code, or empty dict if file absent."""
+def _load_consulates(*, refresh_from_mfa: bool = False) -> dict[str, dict[str, Any]]:
+    """Return consulate entries keyed by ISO-3 code, or empty dict if file absent.
+
+    Args:
+        refresh_from_mfa: If True, attempt to refresh consulate data from
+            Singapore MFA website before loading. Defaults to False.
+    """
+    should_refresh = (
+        refresh_from_mfa
+        and (
+            not CONSULATES_FILE.exists()
+            or (time.time() - CONSULATES_FILE.stat().st_mtime) > CACHE_TTL_SECONDS
+        )
+    )
+    if should_refresh:
+        try:
+            # Import here to avoid circular dependencies
+            from helpers.mfa import update_on_startup
+
+            updated = update_on_startup()
+            if updated:
+                return updated
+        except Exception as exc:  # pylint: disable=broad-exception-caught
+            print(f"Note: Could not refresh consulates from MFA: {exc}")
+
     if not CONSULATES_FILE.exists():
         return {}
     return json.loads(CONSULATES_FILE.read_text(encoding="utf-8"))
@@ -320,8 +337,6 @@ def _normalize_country(country: dict[str, Any]) -> dict[str, Any] | None:
     names = country.get("names") or {}
     area = (country.get("area") or {}).get("kilometers")
 
-    leader = leader_from_api(country.get("leaders")) or MISSING
-
     return {
         "iso3": iso3,
         "name": names.get("common") or names.get("official") or iso3,
@@ -329,7 +344,10 @@ def _normalize_country(country: dict[str, Any]) -> dict[str, Any] | None:
         "population": country.get("population"),
         "capital": primary_capital(country.get("capitals")),
         "government": country.get("government_type") or MISSING,
-        "leader": leader,
+        "head_of_state": MISSING,
+        "head_of_government": MISSING,
+        "foreign_minister": MISSING,
+        "major_cities": MISSING,  # Will be populated from CountriesNow
         "news_outlet": MISSING,
         "un_organizations": organizations_from_api(country),
     }
@@ -339,7 +357,7 @@ def load_country_data() -> CountryDataLoad:
     """Return merged country data and any API connection errors."""
     raw, rest_countries_error, wb_raw, worldbank_error = _fetch_sources_parallel()
     worldbank = _worldbank_by_iso3(wb_raw) if wb_raw else {}
-    consulates = _load_consulates()
+    consulates = _load_consulates(refresh_from_mfa=AUTO_REFRESH_CONSULATES)
 
     if raw is None:
         if worldbank:
@@ -352,7 +370,10 @@ def load_country_data() -> CountryDataLoad:
                         "population": entry.get("population"),
                         "capital": entry.get("capital") or MISSING,
                         "government": MISSING,
-                        "leader": MISSING,
+                        "head_of_state": MISSING,
+                        "head_of_government": MISSING,
+                        "foreign_minister": MISSING,
+                        "major_cities": MISSING,
                         "news_outlet": MISSING,
                         "un_organizations": "None",
                     },
@@ -370,7 +391,10 @@ def load_country_data() -> CountryDataLoad:
                         "population": None,
                         "capital": MISSING,
                         "government": MISSING,
-                        "leader": MISSING,
+                        "head_of_state": MISSING,
+                        "head_of_government": MISSING,
+                        "foreign_minister": MISSING,
+                        "major_cities": MISSING,
                         "news_outlet": MISSING,
                         "un_organizations": "None",
                     },
@@ -387,7 +411,53 @@ def load_country_data() -> CountryDataLoad:
 
     records = [_apply_consulate_info(record, consulates) for record in records]
 
+    country_names = [str(record.get("name", "")) for record in records]
+    un_officials: dict[str, dict[str, str]] = {}
+    cities_data: dict[str, list[str]] = {}
+
+    with ThreadPoolExecutor(max_workers=2) as pool:
+        un_future = pool.submit(fetch_un_protocol_officials)
+        cities_future = pool.submit(
+            fetch_all_cities,
+            country_names,
+            MAX_CITIES_DISPLAY,
+        )
+
+        print("Fetching officials from UN Protocol list...")
+        try:
+            un_officials = un_future.result()
+            if un_officials:
+                print(f"Loaded UN officials for {len(un_officials)} countries")
+        except Exception as exc:  # pylint: disable=broad-exception-caught
+            print(f"Could not fetch officials from UN Protocol list: {exc}")
+            un_officials = {}
+
+        print("Fetching major cities from CountriesNow API...")
+        try:
+            cities_data = cities_future.result()
+            if cities_data:
+                print(f"Loaded cities for {len(cities_data)} countries")
+        except Exception as exc:  # pylint: disable=broad-exception-caught
+            print(f"Could not fetch cities from CountriesNow: {exc}")
+            cities_data = {}
+
+    for record in records:
+        entry = un_officials.get(record["iso3"], {})
+        record["head_of_state"] = entry.get("head_of_state") or MISSING
+        record["head_of_government"] = entry.get("head_of_government") or MISSING
+        record["foreign_minister"] = entry.get("foreign_minister") or MISSING
+
     df = pd.DataFrame.from_records(records)
+    if not df.empty and "name" in df.columns:
+        normalized_city_lookup = build_normalized_city_lookup(cities_data)
+        df["major_cities"] = df["name"].map(
+            lambda name: get_cities_for_country(
+                cities_data,
+                str(name),
+                normalized_city_lookup,
+            )
+        )
+
     if df.empty:
         return CountryDataLoad(
             df=df,
