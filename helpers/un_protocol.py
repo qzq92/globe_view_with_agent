@@ -66,8 +66,8 @@ def _country_to_iso3(country_name: str) -> str | None:
     normalized = country_name.lower().strip()
     if normalized in UN_COUNTRY_ALIASES:
         return UN_COUNTRY_ALIASES[normalized]
-    # Lazy import avoids pulling heavy scraping dependencies at module import time.
-    from scripts.fetch_mfa_representatives import country_name_to_iso3
+    # Lazy import avoids pulling heavier parsing dependencies at module import time.
+    from helpers.mfa import country_name_to_iso3
 
     return country_name_to_iso3(country_name)
 
