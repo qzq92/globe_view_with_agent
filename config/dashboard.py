@@ -13,7 +13,10 @@ CUSTOMDATA_COLUMNS = [
     "population_fmt",
     "capital",
     "government",
-    "leader",
+    "head_of_state",
+    "head_of_government",
+    "foreign_minister",
+    "major_cities",
     "news_outlet",
     "un_organizations",
     "consulate_status",
@@ -25,10 +28,13 @@ HOVERTEMPLATE = (
     "Population: %{customdata[2]}<br>"
     "Capital: %{customdata[3]}<br>"
     "Government: %{customdata[4]}<br>"
-    "Leader: %{customdata[5]}<br>"
-    "Major news outlet: %{customdata[6]}<br>"
-    "UN organizations: %{customdata[7]}<br>"
-    "Singapore mission: %{customdata[8]}"
+    "Head of state: %{customdata[5]}<br>"
+    "Head of government: %{customdata[6]}<br>"
+    "Foreign minister: %{customdata[7]}<br>"
+    "Major cities: %{customdata[8]}<br>"
+    "Major news outlet: %{customdata[9]}<br>"
+    "UN organizations: %{customdata[10]}<br>"
+    "Singapore mission: %{customdata[11]}"
     "<extra></extra>"
 )
 
@@ -107,7 +113,10 @@ FIELD_LABELS = [
     ("Population", "population_fmt"),
     ("Capital", "capital"),
     ("Government", "government"),
-    ("Leader", "leader"),
+    ("Head of state", "head_of_state"),
+    ("Head of government", "head_of_government"),
+    ("Foreign minister", "foreign_minister"),
+    ("Major cities", "major_cities"),
     ("Major news outlet", "news_outlet"),
     ("UN organizations", "un_organizations"),
 ]
