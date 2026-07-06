@@ -1,11 +1,13 @@
-"""CLI entrypoint for fetching/updating MFA mission data."""
+"""CLI entrypoint for fetching/updating MFA mission data.
+
+Run from the project root with::
+
+    uv run python -m scripts.fetch_mfa_representatives
+"""
 
 from __future__ import annotations
 
 import sys
-from pathlib import Path
-
-sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
 from helpers.mfa import fetch_and_update
 
