@@ -15,6 +15,7 @@ from __future__ import annotations
 
 import helpers.ssl_patch  # noqa: F401 - must run before data_loader / requests
 
+import threading
 from typing import Any
 
 import pandas as pd
@@ -55,6 +56,7 @@ from helpers.formatting import format_number
 _load_result: CountryDataLoad | None = None
 df: pd.DataFrame = pd.DataFrame()
 _iso3_index: dict[str, pd.Series] = {}
+_load_lock = threading.Lock()
 
 
 def load_and_process_data() -> CountryDataLoad:
@@ -77,6 +79,21 @@ def load_and_process_data() -> CountryDataLoad:
         df = result.df
 
     return result
+
+
+def ensure_data_loaded() -> CountryDataLoad:
+    """Load app data once per process, even with concurrent callbacks."""
+    global _load_result
+    if _load_result is not None:
+        return _load_result
+
+    with _load_lock:
+        if _load_result is None:
+            print("Loading country data and diplomatic missions...")
+            _load_result = load_and_process_data()
+            print(f"Loaded {len(df)} countries into dashboard")
+
+    return _load_result
 
 
 def build_figure(projection_type: str = MAP_PROJECTION) -> go.Figure:
@@ -340,7 +357,7 @@ def build_main_layout(banner_messages: list[str]) -> html.Div:
     )
 
 
-app = Dash(__name__)
+app = Dash(__name__, suppress_callback_exceptions=True)
 app.title = APP_TITLE
 
 # Start with loading layout
@@ -350,18 +367,12 @@ app.layout = build_loading_layout()
 @app.callback(
     Output("app-container", "children"),
     Input("init-interval", "n_intervals"),
-    prevent_initial_call=False,
+    prevent_initial_call=True,
 )
 def init_app(_: int) -> html.Div:
     """Load data on app start and switch from loading to main layout."""
-    global _load_result
-
-    if _load_result is None:
-        print("Loading country data and diplomatic missions...")
-        _load_result = load_and_process_data()
-        print(f"Loaded {len(df)} countries into dashboard")
-
-    return build_main_layout(_load_result.banner_messages if _load_result else [])
+    load_result = ensure_data_loaded()
+    return build_main_layout(load_result.banner_messages)
 
 
 @app.callback(Output("world-map", "figure"), Input("map-view-tabs", "value"))
