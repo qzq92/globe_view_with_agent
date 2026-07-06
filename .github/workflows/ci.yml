@@ -47,7 +47,7 @@ jobs:
         run: uv sync
 
       - name: Validate consulate dataset (offline)
-        run: uv run python scripts/validate_consulates_singapore.py --offline
+        run: uv run python -m scripts.validate_consulates_singapore --offline
 
   lint:
     name: Pylint
