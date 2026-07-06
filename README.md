@@ -128,7 +128,7 @@ AUTO_REFRESH_CONSULATES = False
 To manually trigger a refresh:
 
 ```bash
-uv run python scripts/fetch_mfa_representatives.py
+uv run python -m scripts.fetch_mfa_representatives
 ```
 
 This fetches from [MFA's Foreign Representatives directory](https://www.mfa.gov.sg/visiting-singapore/foreign-representatives-to-singapore/)
@@ -139,7 +139,7 @@ and merges new missions with existing data (preserving manually curated details)
 Run the consulate validator before relying on new or edited mission entries:
 
 ```bash
-uv run python scripts/validate_consulates_singapore.py
+uv run python -m scripts.validate_consulates_singapore
 ```
 
 The script validates the JSON schema, checks ISO-3 codes against the dashboard
@@ -147,7 +147,7 @@ country data, verifies official links are reachable, and warns if the linked pag
 does not appear Singapore-related. To run only local checks without HTTP requests:
 
 ```bash
-uv run python scripts/validate_consulates_singapore.py --offline
+uv run python -m scripts.validate_consulates_singapore --offline
 ```
 
 ## CI
