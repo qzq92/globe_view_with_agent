@@ -1,0 +1,14 @@
+#cesium-container {
+  background: #020617;
+}
+
+#cesium-container .cesium-widget,
+#cesium-container .cesium-widget canvas {
+  width: 100% !important;
+  height: 100% !important;
+  display: block;
+}
+
+#cesium-container .cesium-widget-credits {
+  display: none !important;
+}
