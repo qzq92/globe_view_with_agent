@@ -6,6 +6,7 @@ MAP_PROJECTION = "natural earth"
 GLOBE_PROJECTION = "orthographic"
 MAP_VIEW_TAB_MAP = "map"
 MAP_VIEW_TAB_GLOBE = "globe"
+MAP_VIEW_TAB_SATELLITE_3D = "satellite-3d"
 
 CUSTOMDATA_COLUMNS = [
     "name",
@@ -96,10 +97,13 @@ MAP_CONTAINER_STYLE = {"flex": "3 1 600px", "minWidth": "320px"}
 PANEL_CONTAINER_STYLE = {**CARD_STYLE, "flex": "1 1 280px", "minWidth": "260px"}
 
 CHOROPLETH_COLORS = {
-    "colorscale": "Viridis",
-    "colorbar_title": "Population",
-    "marker_line_color": COLORS["white"],
-    "marker_line_width": 0.4,
+    # Transparent country fills; only outlines convey country boundaries.
+    "colorscale": [[0, "rgba(0,0,0,0)"], [1, "rgba(0,0,0,0)"]],
+    "marker_line_color": COLORS["border"],
+    "marker_line_width": 0.6,
+    "hover_fill": "rgba(56, 189, 248, 0.12)",
+    "hover_line_color": COLORS["accent"],
+    "hover_line_width": 2.2,
 }
 
 GEO_STYLE = {

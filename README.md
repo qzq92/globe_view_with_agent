@@ -1,19 +1,65 @@
 # globe_view_with_agent
 
 An interactive **World Map Country Dashboard** built with Python and Plotly Dash.
-Hover over any country on the world map to see its key information:
+It combines country facts, Singapore diplomatic missions, and live satellite
+tracking in one browser UI.
 
-- Land area
-- Population
-- Capital
-- Government type
-- Head of state, head of government, and foreign minister (from UN Protocol list)
-- Major cities (from CountriesNow API)
+## What the app does
+
+Open the dashboard, wait for data to load, then explore in three views:
+
+| Tab | Purpose |
+| --- | --- |
+| **Map** | Flat world map (natural-earth). Transparent country fills with outline highlight on hover. |
+| **Globe** | Same country outlines on an orthographic globe projection. |
+| **3D Satellite** | CesiumJS 3D globe of tracked satellites (space stations and weather). |
+
+### Country exploration
+
+Hover any country on Map or Globe to see:
+
+- Land area and population
+- Capital and government type
+- Head of state, head of government, and foreign minister (UN Protocol list)
+- Major cities (CountriesNow API)
 - Major news outlet
 - UN and other international organization memberships
 - Singapore embassy/consulate location and official contact link
 
-The hovered country also populates a synced side info panel.
+The hovered country also fills a synced side info panel.
+
+## Screenshots
+
+- Image folder: [`img/`](img/)
+- Map view sample: [`img/map_view.jpg`](img/map_view.jpg)
+- Globe + satellite sample: [`img/Globeview_satellite.jpg`](img/Globeview_satellite.jpg)
+
+### Satellite tracking
+
+Space Stations and Weather satellites appear as markers on Map/Globe and as
+entities in the 3D Satellite tab. Positions refresh about every **3 minutes**.
+A category checklist filters which groups are shown, and the banner shows when
+positions were last updated. Hover a satellite marker on Map/Globe to highlight
+it and show enriched metadata (NORAD ID, altitude, country, owner, purpose).
+
+## How it works (surface level)
+
+1. **Startup** — The app shows a loading screen, then loads country and mission
+   data once per process (`data_loader` + helpers). API responses are cached
+   under `data/cache/` so repeat startups skip the network when the cache is fresh.
+2. **Country UI** — Plotly choropleth callbacks sync map hover data with the
+   side panel. Map vs Globe only changes the geo projection.
+3. **Satellite pipeline** — `helpers/satellite.py` fetches TLEs from Celestrak,
+   computes current lat/lon/altitude with Skyfield, and merges open metadata from
+   the UCS Satellite Database. Shared state (`dcc.Store`) feeds both 2D overlays
+   and the 3D tab from the same filtered dataset.
+4. **3D view** — CesiumJS is loaded from CDN; `assets/satellite3d.js` renders
+   entities when the 3D Satellite tab is active.
+
+```text
+APIs / PDFs / JSON  -->  data_loader / helpers  -->  Dash layout + callbacks
+Celestrak TLEs + UCS -->  helpers/satellite.py  -->  Map/Globe + Cesium 3D tab
+```
 
 ## How it's built
 
@@ -22,12 +68,14 @@ The dashboard is a local Python web app. Dependencies are declared in
 
 | Library | Role in this project |
 | --- | --- |
-| [Dash](https://dash.plotly.com/) | Web UI framework — layout, tabs (Map/Globe), callbacks, and the side info panel |
-| [Plotly](https://plotly.com/python/) | Interactive choropleth world map, including natural-earth and orthographic (globe) projections |
-| [pandas](https://pandas.pydata.org/) | Loads, merges, and formats country records from APIs and curated JSON |
-| [requests](https://requests.readthedocs.io/) | HTTP client for REST Countries, World Bank, CountriesNow, and MFA |
+| [Dash](https://dash.plotly.com/) | Web UI — layout, tabs, callbacks, stores, and side panels |
+| [Plotly](https://plotly.com/python/) | Choropleth map, globe projection, and 2D satellite markers |
+| [CesiumJS](https://cesium.com/platform/cesiumjs/) | 3D Satellite tab (CDN scripts + `assets/satellite3d.js`) |
+| [Skyfield](https://rhodesmill.org/skyfield/) | Propagates satellite positions from TLE data |
+| [pandas](https://pandas.pydata.org/) | Loads, merges, and formats country and satellite records |
+| [requests](https://requests.readthedocs.io/) | HTTP client for APIs, Celestrak, UCS, and MFA |
 | [beautifulsoup4](https://www.crummy.com/software/BeautifulSoup/) | HTML parsing for MFA website scraping |
-| [pypdf](https://pypdf.readthedocs.io/) | PDF parsing for Singapore MFA diplomatic list |
+| [pypdf](https://pypdf.readthedocs.io/) | PDF parsing for Singapore MFA diplomatic list and UN Protocol PDF |
 | [python-dotenv](https://github.com/theskumar/python-dotenv) | Reads `REST_COUNTRIES_API_KEY` from `.env` at startup |
 | [truststore](https://github.com/sethmlarson/truststore) | Uses the OS certificate store for HTTPS (helps on Windows and corporate networks) |
 
@@ -56,7 +104,12 @@ Development-only tools (installed with `uv sync --all-groups`):
   UN Protocol and Liaison Services public list
   ([PDF](https://www.un.org/dgacm/sites/www.un.org.dgacm/files/Documents_Protocol/hspmfmlist.pdf)).
   Results are cached under `data/cache/un_protocol_officials.json`.
-- Successful API responses are cached locally under `data/cache/` for 24 hours,
+- **Satellite positions** use public [Celestrak](https://celestrak.org/) TLE groups
+  (Space Stations and Weather). TLEs are cached under `data/cache/satellite/`.
+- **Satellite metadata** (country of operator, owner, purpose) is enriched from the
+  open [UCS Satellite Database](https://www.ucsusa.org/resources/satellite-database)
+  text export when available.
+- Successful country API responses are cached locally under `data/cache/` for 24 hours,
   so repeat startups skip the network when the cache is still fresh.
 - Fields that are unavailable from the API response show `N/A`.
 - **Singapore embassy/consulate information** comes from
@@ -92,6 +145,9 @@ uv run python app.py
 ```
 
 Then open http://127.0.0.1:8050 in your browser.
+
+First load may take a moment while country APIs, mission data, and satellite TLEs
+are fetched (or read from cache).
 
 ## Extending Singapore mission data
 
