@@ -108,7 +108,20 @@ window.dash_clientside = Object.assign({}, window.dash_clientside, {
           ? String(selectedSatellite.norad_id)
           : null;
 
-      viewer.entities.removeAll();
+      // Rebuild entities only when the satellite dataset changes.
+      const datasetSignature = [
+        satelliteStore && satelliteStore.updated_at
+          ? satelliteStore.updated_at
+          : "none",
+        records.length,
+        satelliteStore && satelliteStore.categories
+          ? satelliteStore.categories.join(",")
+          : "",
+      ].join("|");
+      const datasetChanged = state.datasetSignature !== datasetSignature;
+      if (datasetChanged) {
+        viewer.entities.removeAll();
+      }
 
       const defaultColor = Cesium.Color.LIGHTGRAY;
       const categoryColors = {
@@ -116,39 +129,51 @@ window.dash_clientside = Object.assign({}, window.dash_clientside, {
         Weather: Cesium.Color.fromCssColorString("#73d13d"),
       };
 
-      records.forEach((satellite) => {
-        const isSelected =
-          selectedNorad && String(satellite.norad_id) === selectedNorad;
-        const color = categoryColors[satellite.category] || defaultColor;
+      if (datasetChanged) {
+        records.forEach((satellite) => {
+          const isSelected =
+            selectedNorad && String(satellite.norad_id) === selectedNorad;
+          const color = categoryColors[satellite.category] || defaultColor;
 
-        const description = [
-          `<b>${satellite.name || "Unknown"}</b>`,
-          `<br>NORAD: ${satellite.norad_id || "Unknown"}`,
-          `<br>Category: ${satellite.category || "Unknown"}`,
-          `<br>Altitude: ${Number(satellite.elevation_km || 0).toFixed(1)} km`,
-          `<br>Country: ${satellite.country || "Unknown"}`,
-          `<br>Owner: ${satellite.owner || "Unknown"}`,
-          `<br>Purpose: ${satellite.purpose || "Unknown"}`,
-        ].join("");
+          const description = [
+            `<b>${satellite.name || "Unknown"}</b>`,
+            `<br>NORAD: ${satellite.norad_id || "Unknown"}`,
+            `<br>Category: ${satellite.category || "Unknown"}`,
+            `<br>Altitude: ${Number(satellite.elevation_km || 0).toFixed(1)} km`,
+            `<br>Country: ${satellite.country || "Unknown"}`,
+            `<br>Owner: ${satellite.owner || "Unknown"}`,
+            `<br>Purpose: ${satellite.purpose || "Unknown"}`,
+          ].join("");
 
-        viewer.entities.add({
-          id: "sat-" + String(satellite.norad_id),
-          name: satellite.name || "Satellite",
-          description: description,
-          position: Cesium.Cartesian3.fromDegrees(
-            Number(satellite.lon),
-            Number(satellite.lat),
-            Number(satellite.alt_m || 0)
-          ),
-          point: {
-            pixelSize: isSelected ? 12 : 8,
-            color: color,
-            outlineColor: Cesium.Color.WHITE,
-            outlineWidth: 1,
-            disableDepthTestDistance: Number.POSITIVE_INFINITY,
-          },
+          viewer.entities.add({
+            id: "sat-" + String(satellite.norad_id),
+            name: satellite.name || "Satellite",
+            description: description,
+            position: Cesium.Cartesian3.fromDegrees(
+              Number(satellite.lon),
+              Number(satellite.lat),
+              Number(satellite.alt_m || 0)
+            ),
+            point: {
+              pixelSize: isSelected ? 12 : 8,
+              color: color,
+              outlineColor: Cesium.Color.WHITE,
+              outlineWidth: 1,
+              disableDepthTestDistance: Number.POSITIVE_INFINITY,
+            },
+          });
         });
-      });
+        state.datasetSignature = datasetSignature;
+      } else {
+        // Only update marker sizes for selected satellite when dataset is unchanged.
+        viewer.entities.values.forEach((entity) => {
+          if (!entity.id || !entity.point) {
+            return;
+          }
+          const isSelected = selectedNorad && entity.id === "sat-" + selectedNorad;
+          entity.point.pixelSize = isSelected ? 12 : 8;
+        });
+      }
 
       if (records.length > 0) {
         if (!state.didFlyTo) {

@@ -65,6 +65,8 @@ _load_lock = threading.Lock()
 _satellite_lock = threading.Lock()
 _satellite_df: pd.DataFrame = pd.DataFrame()
 _satellite_updated_at: datetime | None = None
+_figure_cache_lock = threading.Lock()
+_base_figure_cache: dict[tuple[str, str, str | None], go.Figure] = {}
 
 SATELLITE_INTERVAL_MS = 180_000
 SATELLITE_REFRESH_SECONDS = 180
@@ -90,11 +92,10 @@ def load_and_process_data() -> CountryDataLoad:
         # customdata columns must align with the hovertemplate indices below.
         result.df["area_fmt"] = result.df["area"].map(lambda v: format_number(v, " km2"))
         result.df["population_fmt"] = result.df["population"].map(format_number)
-        result.df["consulate_status"] = result.df.apply(
-            lambda row: row["consulate_name"]
-            if row["consulate_name"] != MISSING
-            else row["consulate_note"],
-            axis=1,
+        # Vectorized replacement for row-wise apply.
+        result.df["consulate_status"] = result.df["consulate_name"].where(
+            result.df["consulate_name"] != MISSING,
+            result.df["consulate_note"],
         )
         _iso3_index = {iso3: row for iso3, row in result.df.set_index("iso3").iterrows()}
         df = result.df
@@ -192,6 +193,50 @@ def _store_to_satellite_df(store_data: dict[str, Any] | None) -> pd.DataFrame:
     if not records:
         return pd.DataFrame()
     return pd.DataFrame(records)
+
+
+def _satellite_signature(store_data: dict[str, Any] | None) -> str:
+    """Build a stable signature used by the figure cache."""
+    if not store_data:
+        return "empty"
+    records = store_data.get("satellites", [])
+    updated = store_data.get("updated_at") or "none"
+    categories = ",".join(store_data.get("categories", []))
+    return f"{updated}|{categories}|{len(records)}"
+
+
+def _base_figure_from_cache(
+    projection_type: str,
+    satellite_df: pd.DataFrame | None,
+    selected_satellite: dict[str, Any] | None,
+    satellite_sig: str,
+) -> go.Figure:
+    """Return cached base figure (countries + satellites, without hover overlay)."""
+    selected_norad = (
+        str(selected_satellite.get("norad_id"))
+        if selected_satellite and selected_satellite.get("norad_id") is not None
+        else None
+    )
+    key = (projection_type, satellite_sig, selected_norad)
+
+    with _figure_cache_lock:
+        cached = _base_figure_cache.get(key)
+        if cached is not None:
+            return go.Figure(cached)
+
+        built = build_figure(
+            projection_type=projection_type,
+            satellite_df=satellite_df,
+            selected_satellite=selected_satellite,
+            hover_iso3=None,
+        )
+        _base_figure_cache[key] = go.Figure(built)
+
+        # Prevent unbounded growth when filters/selections vary.
+        if len(_base_figure_cache) > 24:
+            stale_key = next(iter(_base_figure_cache))
+            _base_figure_cache.pop(stale_key, None)
+        return built
 
 
 def build_figure(
@@ -726,12 +771,31 @@ def update_map_projection(
         GLOBE_PROJECTION if view == MAP_VIEW_TAB_GLOBE else MAP_PROJECTION
     )
     satellite_df = _store_to_satellite_df(satellite_store)
-    return build_figure(
-        projection,
-        satellite_df,
-        selected_satellite,
-        hover_iso3=hover_iso3,
+    base_figure = _base_figure_from_cache(
+        projection_type=projection,
+        satellite_df=satellite_df,
+        selected_satellite=selected_satellite,
+        satellite_sig=_satellite_signature(satellite_store),
     )
+
+    if hover_iso3 and hover_iso3 in _iso3_index:
+        base_figure.add_trace(
+            go.Choropleth(
+                locations=[hover_iso3],
+                locationmode="ISO-3",
+                z=[1],
+                colorscale=[
+                    [0, CHOROPLETH_COLORS["hover_fill"]],
+                    [1, CHOROPLETH_COLORS["hover_fill"]],
+                ],
+                showscale=False,
+                marker_line_color=CHOROPLETH_COLORS["hover_line_color"],
+                marker_line_width=CHOROPLETH_COLORS["hover_line_width"],
+                hoverinfo="skip",
+                showlegend=False,
+            )
+        )
+    return base_figure
 
 
 @app.callback(
