@@ -8,6 +8,7 @@ from config.dashboard import ERROR_BANNER_STYLE
 
 
 def build_api_error_banner(messages: list[str]) -> html.Div:
+    """Return a hidden or visible banner listing data-source load errors."""
     if not messages:
         return html.Div(id="api-error-banner", style={"display": "none"})
 

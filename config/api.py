@@ -32,3 +32,20 @@ UN_PROTOCOL_PDF_URL = (
     "https://www.un.org/dgacm/sites/www.un.org.dgacm/files/"
     "Documents_Protocol/hspmfmlist.pdf"
 )
+
+# Maritime news: GDELT DOC 2.0 (JSON, no key) plus public RSS feeds.
+GDELT_DOC_API_URL = "https://api.gdeltproject.org/api/v2/doc/doc"
+GDELT_DOC_QUERY = (
+    '(maritime OR shipping OR seafarer OR tanker OR "container ship" '
+    'OR "port congestion") sourcelang:eng'
+)
+MARITIME_NEWS_TTL_SECONDS = 1_800
+MARITIME_NEWS_MAX_ARTICLES = 50
+MARITIME_NEWS_REQUEST_TIMEOUT = 25
+MARITIME_NEWS_RSS_FEEDS = (
+    ("gCaptain", "https://gcaptain.com/feed/"),
+    ("Splash247", "https://splash247.com/feed/"),
+    ("Marine Insight", "https://www.marineinsight.com/feed/"),
+    ("Offshore Energy", "https://www.offshore-energy.biz/feed/"),
+    ("Seatrade Maritime", "https://www.seatrade-maritime.com/rss.xml"),
+)

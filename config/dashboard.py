@@ -1,18 +1,62 @@
 """Dash dashboard layout, map, and UI configuration."""
 
-APP_TITLE = "World Map Country Dashboard"
+import os
 
-MAP_PROJECTION = "natural earth"
+from dotenv import load_dotenv
+
+from config.paths import ENV_FILE
+
+load_dotenv(ENV_FILE)
+
+APP_TITLE = "World Map, Satellite, and Maritime Dashboard"
+
 GLOBE_PROJECTION = "orthographic"
-MAP_VIEW_TAB_MAP = "map"
 MAP_VIEW_TAB_GLOBE = "globe"
+MAP_VIEW_TAB_MARITIME = "maritime"
+MAP_VIEW_TAB_MARITIME_NEWS = "maritime-news"
 MAP_VIEW_TAB_SATELLITE_3D = "satellite-3d"
+
+MARITIME_PAGE_URL = "https://www.marinetraffic.com/"
+DEFAULT_MARITIME_EMBED_URL = (
+    "https://www.marinetraffic.com/en/ais/embed/"
+    "zoom:3/centery:20/centerx:0/maptype:0/shownames:true/"
+    "mmsi:0/shipid:0/fleet:/fleet_id:/vtypes:/showmenu:true/remember:false"
+)
+MARITIME_EMBED_URL = (
+    os.getenv("MARITIME_EMBED_URL", DEFAULT_MARITIME_EMBED_URL).strip()
+    or DEFAULT_MARITIME_EMBED_URL
+)
+
+DATA_SOURCE_LINKS = (
+    ("REST Countries", "https://restcountries.com/"),
+    (
+        "World Bank",
+        "https://datahelpdesk.worldbank.org/knowledgebase/articles/889392",
+    ),
+    (
+        "UN Protocol",
+        "https://www.un.org/dgacm/sites/www.un.org.dgacm/files/"
+        "Documents_Protocol/hspmfmlist.pdf",
+    ),
+    (
+        "Singapore MFA",
+        "https://www.mfa.gov.sg/visiting-singapore/foreign-representatives-to-singapore/",
+    ),
+    ("MarineTraffic", MARITIME_PAGE_URL),
+    ("GDELT", "https://www.gdeltproject.org/"),
+    ("Celestrak", "https://celestrak.org/"),
+    (
+        "UCS Satellite Database",
+        "https://www.ucsusa.org/resources/satellite-database",
+    ),
+)
 
 CUSTOMDATA_COLUMNS = [
     "name",
     "area_fmt",
     "population_fmt",
     "capital",
+    "currency",
     "government",
     "head_of_state",
     "head_of_government",
@@ -28,14 +72,15 @@ HOVERTEMPLATE = (
     "Land area: %{customdata[1]}<br>"
     "Population: %{customdata[2]}<br>"
     "Capital: %{customdata[3]}<br>"
-    "Government: %{customdata[4]}<br>"
-    "Head of state: %{customdata[5]}<br>"
-    "Head of government: %{customdata[6]}<br>"
-    "Foreign minister: %{customdata[7]}<br>"
-    "Major cities: %{customdata[8]}<br>"
-    "Major news outlet: %{customdata[9]}<br>"
-    "UN organizations: %{customdata[10]}<br>"
-    "Singapore mission: %{customdata[11]}"
+    "Currency: %{customdata[4]}<br>"
+    "Government: %{customdata[5]}<br>"
+    "Head of state: %{customdata[6]}<br>"
+    "Head of government: %{customdata[7]}<br>"
+    "Foreign minister: %{customdata[8]}<br>"
+    "Major cities: %{customdata[9]}<br>"
+    "Major news outlet: %{customdata[10]}<br>"
+    "UN organizations: %{customdata[11]}<br>"
+    "Singapore mission: %{customdata[12]}"
     "<extra></extra>"
 )
 
@@ -46,7 +91,6 @@ COLORS = {
     "muted": "#94a3b8",
     "accent": "#38bdf8",
     "border": "#334155",
-    "white": "#ffffff",
 }
 
 CARD_STYLE = {
@@ -93,6 +137,7 @@ CONTENT_ROW_STYLE = {
 
 GRAPH_HEIGHT = "70vh"
 GRAPH_CONFIG = {"displayModeBar": False}
+HIDDEN_STYLE = {"display": "none"}
 MAP_CONTAINER_STYLE = {"flex": "3 1 600px", "minWidth": "320px"}
 PANEL_CONTAINER_STYLE = {**CARD_STYLE, "flex": "1 1 280px", "minWidth": "260px"}
 
@@ -116,6 +161,7 @@ FIELD_LABELS = [
     ("Land area", "area_fmt"),
     ("Population", "population_fmt"),
     ("Capital", "capital"),
+    ("Currency", "currency"),
     ("Government", "government"),
     ("Head of state", "head_of_state"),
     ("Head of government", "head_of_government"),

@@ -1,7 +1,7 @@
 """Load and merge country data from the REST Countries v5 API.
 
 REST Countries is the primary source for country facts (area, population,
-capital, government type, and organization memberships), using an API key stored
+capital, currency, government type, and organization memberships), using an API key stored
 in ``.env`` as ``REST_COUNTRIES_API_KEY``.
 
 When REST Countries does not provide a value, the loader falls back to the
@@ -50,7 +50,7 @@ from helpers.countriesnow import (
     fetch_all_cities,
     get_cities_for_country,
 )
-from helpers.country import organizations_from_api, primary_capital
+from helpers.country import organizations_from_api, primary_capital, primary_currency
 from helpers.un_protocol import fetch_un_protocol_officials
 from helpers.values import is_missing
 from helpers.worldbank import indicator_map
@@ -343,6 +343,7 @@ def _normalize_country(country: dict[str, Any]) -> dict[str, Any] | None:
         "area": area,
         "population": country.get("population"),
         "capital": primary_capital(country.get("capitals")),
+        "currency": primary_currency(country.get("currencies")),
         "government": country.get("government_type") or MISSING,
         "head_of_state": MISSING,
         "head_of_government": MISSING,
@@ -369,6 +370,7 @@ def load_country_data() -> CountryDataLoad:
                         "area": entry.get("area"),
                         "population": entry.get("population"),
                         "capital": entry.get("capital") or MISSING,
+                        "currency": MISSING,
                         "government": MISSING,
                         "head_of_state": MISSING,
                         "head_of_government": MISSING,
@@ -390,6 +392,7 @@ def load_country_data() -> CountryDataLoad:
                         "area": None,
                         "population": None,
                         "capital": MISSING,
+                        "currency": MISSING,
                         "government": MISSING,
                         "head_of_state": MISSING,
                         "head_of_government": MISSING,

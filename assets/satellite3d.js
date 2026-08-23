@@ -1,6 +1,6 @@
 window.dash_clientside = Object.assign({}, window.dash_clientside, {
   satellite3d: {
-    render: function (satelliteStore, selectedSatellite, activeTab) {
+    render: function (satelliteStore, activeTab) {
       if (activeTab !== "satellite-3d") {
         return "3d-hidden";
       }
@@ -103,10 +103,7 @@ window.dash_clientside = Object.assign({}, window.dash_clientside, {
       viewer.scene.requestRender();
 
       const records = (satelliteStore && satelliteStore.satellites) || [];
-      const selectedNorad =
-        selectedSatellite && selectedSatellite.norad_id != null
-          ? String(selectedSatellite.norad_id)
-          : null;
+      const selectedNorad = null;
 
       // Rebuild entities only when the satellite dataset changes.
       const datasetSignature = [
